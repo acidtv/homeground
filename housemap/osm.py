@@ -11,13 +11,14 @@ type_map = {
     'supermarket': ('shop', 'supermarket'),
     'sports-centre': ('leisure', 'sports_centre'),
     'childcare': ('amenity', 'childcare'),
-    'train-station': ('railway', 'station'),
+    # FIXME train station
     # FIXME park / forest / nature
 }
 
 
 def nodes(filename, node_types):
     catch = ['node', 'way']
+    used = ['tag', 'nd']
 
     # use disk based node lat-lon cache
     with shelve.open('osm-import-cache') as cache:
@@ -36,9 +37,12 @@ def nodes(filename, node_types):
                 if elm.tag in catch:
                     node = make_node(elm, node_types, cache)
 
+                if (elm.tag in catch) or (elm.tag not in used):
                     # clear some memory, because that might cause probs with
                     # huge import files
-                    #elm.clear()
+                    # only clear when we've encountered something interesting (like a node, way), otherwise
+                    # tags within a node will be removed too
+                    elm.clear()
                     while elm.getprevious() is not None:
                         del elm.getparent()[0]
 
@@ -49,21 +53,14 @@ def nodes(filename, node_types):
 def make_node(elm, node_types, cache):
     node_type = get_node_type(elm)
 
-    print(elm.tag)
     if not node_type:
         return
-    print(node_type)
 
     if not elm.get('lat'):
-        if not hasattr(elm, 'node'):
-            # we need refs to other nodes to get coords
-            return
-
         coords = get_node_coords(elm, cache)
     else:
         coords = (elm.get('lat'), elm.get('lon'))
 
-    print(coords)
     return Node(
         osm_id=elm.get('id'),
         node_type_id=node_types[node_type],
@@ -72,22 +69,31 @@ def make_node(elm, node_types, cache):
     )
 
 def get_node_coords(elm, cache):
-    if not 'node' in elm:
-        return
-
-    lat = mean([cache[node.get('id')]['lat'] for node in elm.iterchildren('node')])
-    lon = mean([cache[node.get('id')]['lon'] for node in elm.iterchildren('node')])
+    lat = mean([float(cache[node.get('ref')][0]) for node in elm.iterchildren('nd')])
+    lon = mean([float(cache[node.get('ref')][1]) for node in elm.iterchildren('nd')])
 
     return (lat, lon)
 
 def get_node_type(node):
     for tag in node.iterchildren('tag'):
-        print(tag.items())
         for key, value in type_map.items():
             # check if tag key and value match
-            print(value)
             if value == (tag.get('k'), tag.get('v')):
                 return key
             # check if tag key matches if no value is configured
             elif value[1] is None and tag.get('k') == value[0]:
                 return key
+
+# for testing the import code for memory leaks
+class InfiniteXML (object):
+    def __init__(self):
+        self._root = True
+        self.i = 0
+    def read(self, len=None):
+        self.i = self.i + 1
+        if self._root:
+            self._root=False
+            return b"<?xml version='1.0' encoding='US-ASCII'?><records>\n"
+        else:
+            return b'<node id="%d" lat="50" lon="40">\n\t<ancestor attribute="value">text value</ancestor>\n</node>\n' % self.i
+

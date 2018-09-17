@@ -26,7 +26,6 @@ def add_nodetypes():
         NodeType(name='supermarket'),
         NodeType(name='sports-centre'),
         NodeType(name='childcare'),
-        NodeType(name='train-station'),
     ])
 
     session.commit()
@@ -36,7 +35,7 @@ def add_nodetypes():
 @click.argument('filename')
 def import_osm(filename):
     i = 0
-    slice_size = 5
+    slice_size = 500
 
     session = db.session()
     node_types = dict(session.query(NodeType.name, NodeType.id).all())
