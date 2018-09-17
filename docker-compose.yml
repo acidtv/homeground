@@ -1,0 +1,14 @@
+version: '2.0'
+services:
+    app:
+        restart: always
+        build: .
+        ports: 
+            - 5000:5000
+        volumes: 
+            - .:/usr/src/app
+        environment:
+            - FLASK_DEBUG=1
+            - FLASK_APP=housemap
+            - FLASK_ENV=development
+            - HOUSEMAP_SETTINGS=default.cfg

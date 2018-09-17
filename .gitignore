@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+TODO.md
+housemap.db
+largedb.cfg
+map*.xml
