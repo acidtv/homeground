@@ -4,7 +4,8 @@ class NodeType(db.Model):
     __tablename__ = 'node_types'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), unique=True)
+    default_radius = db.Column(db.Float())
 
 class Node(db.Model):
     __tablename__ = 'nodes'

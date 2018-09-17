@@ -5,6 +5,7 @@ from sqlalchemy import between
 app = Flask(__name__)
 app.config.from_envvar('HOUSEMAP_SETTINGS')
 app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DB_ENGINE']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from .models import Node, NodeType
@@ -28,7 +29,8 @@ def nodes():
     except TypeError:
         abort(400)
 
-    nodes = db.session.query(Node.lat, Node.lon) \
+    nodes = db.session.query(Node.lat, Node.lon, NodeType.default_radius) \
+        .join(Node.node_type) \
         .filter(
             Node.node_type_id.in_(node_types),
             between(Node.lat, bounding_box[1], bounding_box[3]),

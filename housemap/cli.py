@@ -19,13 +19,14 @@ def add_nodetypes():
 
     # FIXME use config
     session.add_all([
-        NodeType(name='busstop'),
-        NodeType(name='shop'),
-        NodeType(name='bakery'),
-        NodeType(name='pub'),
-        NodeType(name='supermarket'),
-        NodeType(name='sports-centre'),
-        NodeType(name='childcare'),
+        NodeType(name='busstop', default_radius=1),
+        NodeType(name='shop', default_radius=1),
+        NodeType(name='bakery', default_radius=1),
+        NodeType(name='pub', default_radius=1),
+        NodeType(name='supermarket', default_radius=1.5),
+        NodeType(name='sports-centre', default_radius=1.5),
+        NodeType(name='childcare', default_radius=2),
+        NodeType(name='railway-station', default_radius=3),
     ])
 
     session.commit()
