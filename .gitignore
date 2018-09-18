@@ -108,3 +108,4 @@ housemap.db
 largedb.cfg
 map*.xml
 *.osm
+osm-import-cache

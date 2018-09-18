@@ -57,9 +57,12 @@ def make_nodes(elm, available_node_types, cache):
     if not node_types:
         return
 
-    print(dict(elm.items()))
     if not elm.get('lat'):
-        coords = get_node_coords(elm, cache)
+        try:
+            coords = get_node_coords(elm, cache)
+        except Exception as e:
+            print("Could not get coords: {0}".format(e))
+            return
     else:
         coords = (elm.get('lat'), elm.get('lon'))
 
@@ -72,8 +75,13 @@ def make_nodes(elm, available_node_types, cache):
         )
 
 def get_node_coords(elm, cache):
-    lat = mean([float(cache[node.get('ref')][0]) for node in elm.iterchildren('nd')])
-    lon = mean([float(cache[node.get('ref')][1]) for node in elm.iterchildren('nd')])
+    children = list(elm.iterchildren('nd'))
+
+    if not children:
+        raise Exception('No referenes to nodes found in elm {0}'.format(elm.tag))
+
+    lat = mean([float(cache[node.get('ref')][0]) for node in children])
+    lon = mean([float(cache[node.get('ref')][1]) for node in children])
 
     return (lat, lon)
 
