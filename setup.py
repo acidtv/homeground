@@ -10,5 +10,6 @@ setup(
         'untangle',
         'lxml',
         'flask-sqlalchemy',
+        'shapely',
     ],
 )

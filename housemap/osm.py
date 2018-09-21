@@ -37,18 +37,20 @@ def nodes(filename, node_types):
                 if elm.tag in catch:
                     nodes = make_nodes(elm, node_types, cache)
 
+                if nodes:
+                    for node in nodes:
+                        yield node
+
                 if (elm.tag in catch) or (elm.tag not in used):
-                    # clear some memory, because that might cause probs with
-                    # huge import files
-                    # only clear when we've encountered something interesting (like a node, way), otherwise
-                    # tags within a node will be removed too
+                    # Clear some memory, because that might cause probs with huge import files.
+                    # Only clear when we've encountered something interesting (like a node, way), otherwise
+                    # tags within a node will be removed too.
+                    # Clearing happens after yielding the nodes, because otherwise the node will
+                    # be cleared before it has yielded.
                     elm.clear()
                     while elm.getprevious() is not None:
                         del elm.getparent()[0]
 
-                if nodes:
-                    for node in nodes:
-                        yield node
 
 
 def make_nodes(elm, available_node_types, cache):
