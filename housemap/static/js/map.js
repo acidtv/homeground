@@ -77,12 +77,18 @@ function update_heatmap(heatmaplayer, filter, bounds) {
 		'/api/nodes', 
 		$.param(filter),
 		function(data) {
+			/*
 			heatmaplayer.setData({
 				max: 5,
 				data: data,
 			});
 
 			heatmaplayer.addTo(map);
+			*/
+
+			data.forEach(function(polygon) {
+				L.polygon(polygon, {color: 'red'}).addTo(map);
+			});
 	})
 }
 

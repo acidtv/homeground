@@ -1,6 +1,8 @@
 from flask import Flask, render_template, jsonify, request, abort, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import between
+from shapely.ops import cascaded_union
+from shapely.geometry import Point, MultiPolygon
 
 app = Flask(__name__)
 app.config.from_envvar('HOUSEMAP_SETTINGS')
@@ -38,4 +40,16 @@ def nodes():
         ) \
         .all()
 
-    return jsonify(nodes)
+    polygons = polygonize(nodes)
+
+    return jsonify(polygons)
+
+def polygonize(nodes):
+    base_radius = 0.0005
+    seperate_polygons = [Point(lat, lon).buffer(base_radius * radius) for lat, lon, radius in nodes]
+    polygons = cascaded_union(seperate_polygons)
+
+    if not isinstance(polygons, MultiPolygon):
+        polygons = [polygons]
+
+    return [list(polygon.exterior.coords) for polygon in polygons]
