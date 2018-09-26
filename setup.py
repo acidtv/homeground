@@ -6,10 +6,10 @@ setup(
     include_package_data=True,
     install_requires=[
         'flask',
-        'sqlalchemy',
-        'untangle',
         'lxml',
+        'sqlalchemy',
         'flask-sqlalchemy',
         'shapely',
+        'pyproj',
     ],
 )
