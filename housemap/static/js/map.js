@@ -1,20 +1,19 @@
 var map;
 var form;
-var heatmaplayer;
+var feature_layers = [];
 
 function init() {
-	heatmaplayer = init_heatmap();
 	map = init_map();
 	form = $('.menu form.features');
 
 	// update map with newly selected features
 	$('.menu form.features').on('submit', function(event) {
-		update_heatmap_by_form();
+		update_map_by_form();
 		event.preventDefault();
 	});
 
 	$(map).on('moveend', function(event) {
-		update_heatmap_by_form();
+		update_map_by_form();
 	})
 
 	$('.menu form.search').on('submit', function(event) {
@@ -39,57 +38,32 @@ function init_map() {
 	});
 }
 
-function init_heatmap() {
-	var cfg = {
-		// radius should be small ONLY if scaleRadius is true (or small radius is intended)
-		// if scaleRadius is false it will be the constant radius used in pixels
-		"radius": .003,
-		"maxOpacity": .5, 
-		// scales the radius based on map zoom
-		"scaleRadius": true, 
-		// if set to false the heatmap uses the global maximum for colorization
-		// if activated: uses the data maximum within the current map boundaries 
-		//   (there will always be a red spot with useLocalExtremas true)
-		"useLocalExtrema": false,
-		// which field name in your data represents the latitude - default "lat"
-		latField: "0",
-		// which field name in your data represents the longitude - default "lng"
-		lngField: "1",
-		// which field name in your data represents the data value - default "value"
-		valueField: 'count'
-	};
-
-	return new HeatmapOverlay(cfg);
-}
-
-function update_heatmap_by_form() {
-	update_heatmap(
-		heatmaplayer, 
+function update_map_by_form() {
+	update_map(
 		form.serializeArray(),
 		map.getBounds()
 	);
 }
 
-function update_heatmap(heatmaplayer, filter, bounds) {
+function update_map(filter, bounds) {
 	filter.push({name: 'bounds', value: bounds.toBBoxString()});
 
 	$.getJSON(
 		'/api/nodes', 
 		$.param(filter),
 		function(data) {
-			/*
-			heatmaplayer.setData({
-				max: 5,
-				data: data,
-			});
-
-			heatmaplayer.addTo(map);
-			*/
+			clear_map();
 
 			data.forEach(function(polygon) {
-				L.polygon(polygon, {color: 'red'}).addTo(map);
+				feature_layers.push(L.polygon(polygon, {color: 'red'}).addTo(map));
 			});
 	})
+}
+
+function clear_map() {
+	feature_layers.forEach(function(layer) {
+		layer.removeFrom(map);
+	});
 }
 
 function map_search(query) {
@@ -109,10 +83,6 @@ function map_search(query) {
 				new L.LatLng(rawbounds[1], rawbounds[3])
 			);
 			
-			// hide heatmap while flying
-			heatmaplayer.remove();
-
 			map.flyToBounds(bounds, {maxZoom: 17});
-			//L.marker([data[0]['lat'], data[0]['lon']]).addTo(map);
 		})
 }
