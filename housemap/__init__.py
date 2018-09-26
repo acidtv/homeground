@@ -57,12 +57,13 @@ def nodes():
 
     polygon_groups = polygonize_groups(node_groups)
 
-    # intersections = calculate_group_intersections(polygon_groups)
+    intersections = calculate_group_intersections(list(polygon_groups))
 
     # convert to wgs84
-    wgs84_polygon_groups = polygongroups_to_latlon(polygon_groups, zone_number, zone_letter)
+    #wgs84_polygon_groups = polygongroups_to_latlon(polygon_groups, zone_number, zone_letter)
+    wgs84_intersections = polygons_to_latlon(intersections, zone_number, zone_letter)
 
-    return jsonify(list(wgs84_polygon_groups))
+    return jsonify(list(wgs84_intersections))
 
 
 def cartesianize(nodes, bounds):
@@ -77,7 +78,11 @@ def cartesianize(nodes, bounds):
 
 def polygongroups_to_latlon(polygon_groups, zone_number, zone_letter):
     for polygons in polygon_groups:
-        yield [to_latlon(polygon.exterior.coords, zone_number, zone_letter) for polygon in polygons]
+        yield polygons_to_latlon(polygons, zone_number, zone_letter)
+
+
+def polygons_to_latlon(polygons, zone_number, zone_letter):
+    return [to_latlon(polygon.exterior.coords, zone_number, zone_letter) for polygon in polygons]
 
 
 def polygonize_groups(node_groups):
@@ -112,8 +117,14 @@ def to_latlon(coords, zone_number, zone_letter):
 
 
 def calculate_group_intersections(polygon_groups):
+    # loop polygon groups
     for id, group in enumerate(polygon_groups):
+        # loop polygons in group
         for polygon in group:
+            # loop over groups farther in this list to check for intersections
             for next_group in polygon_groups[id+1:]:
                 for next_polygon in next_group:
-                    pass
+                    intersection = polygon.intersection(next_polygon)
+
+                    if intersection:
+                        yield intersection
