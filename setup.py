@@ -10,6 +10,6 @@ setup(
         'sqlalchemy',
         'flask-sqlalchemy',
         'shapely',
-        'pyproj',
+        'utm',
     ],
 )
