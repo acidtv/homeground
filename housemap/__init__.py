@@ -95,10 +95,10 @@ def polygonize(nodes):
         return []
 
     # default radius in meters
-    base_radius = 100
+    base_radius = 200
     resolution = 8
 
-    seperate_polygons = [Point(lat, lon).buffer(base_radius * radius, resolution) for lat, lon, radius in nodes]
+    seperate_polygons = [Point(lat, lon).buffer(base_radius * radius, resolution) for lat, lon, type_id, radius in nodes]
     polygons = cascaded_union(seperate_polygons)
 
     if not isinstance(polygons, MultiPolygon):
