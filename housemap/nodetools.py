@@ -4,33 +4,20 @@ from itertools import groupby
 from functools import reduce
 import utm
 
-def node_intersections(nodes, bounds):
-    zone_number, zone_letter, cartesian_nodes = cartesianize(nodes, bounds)
-
+def node_intersections(nodes, min_count):
     # group by second elemnt, node_type_id
-    node_groups = group_nodes(cartesian_nodes, 2)
+    node_groups = group_nodes(nodes, 2)
 
     polygon_groups = polygonize_groups(node_groups)
+    count, intersections = polygon_intersections(polygon_groups)
 
-    # calculating intersections does not work with an iterator :(
-    intersections = polygon_intersections(polygon_groups)
+    if count < min_count:
+        raise TooFewNodeTypesException()
 
     if not isinstance(intersections, MultiPolygon):
         intersections = MultiPolygon([intersections])
 
-    # convert to wgs84
-    wgs84_intersections = polygons_to_latlon(intersections, zone_number, zone_letter)
-
-    return wgs84_intersections
-
-def cartesianize(nodes, bounds):
-    zone_number = utm.latlon_to_zone_number(*bounds[0])
-    zone_letter = utm.latitude_to_zone_letter(bounds[0][0])
-
-    # FIXME convert to UTM on import?
-    cartesian_nodes = [utm.from_latlon(lat, lon)[:2] + (type_id, radius) for lat, lon, type_id, radius in nodes]
-
-    return (zone_number, zone_letter, cartesian_nodes)
+    return intersections
 
 
 def polygongroups_to_latlon(polygon_groups, zone_number, zone_letter):
@@ -74,4 +61,20 @@ def to_latlon(coords, zone_number, zone_letter):
 
 
 def polygon_intersections(polygons):
-    return reduce(lambda a, b: a.intersection(b), polygons)
+    return counting_reduce(lambda a, b: a.intersection(b), polygons, MultiPolygon([]))
+
+
+def counting_reduce(func, data, initial):
+    counting_func = lambda a, b: (1, b) if a[0] == 0 else (a[0]+1, func(a[1], b))
+    return reduce(counting_func, data, (0, initial))
+
+
+def zone_by_latlon(lat, lon):
+    zone_number = latlon_to_zone_number(lat, lon)
+    zone_letter = latitude_to_zone_letter(lat)
+
+    return zone_number, zone_letter
+
+
+class TooFewNodeTypesException(Exception):
+    pass

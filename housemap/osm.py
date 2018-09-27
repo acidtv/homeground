@@ -1,4 +1,5 @@
 import shelve
+import utm
 from statistics import mean
 from .models import Node
 from lxml import etree
@@ -66,15 +67,17 @@ def make_nodes(elm, available_node_types, cache):
             print("Could not get coords: {0}".format(e))
             return
     else:
-        coords = (elm.get('lat'), elm.get('lon'))
+        coords = (float(elm.get('lat')), float(elm.get('lon')))
 
     for node_type in node_types:
-        yield Node(
+        node = Node(
             osm_id=elm.get('id'),
-            node_type_id=available_node_types[node_type],
-            lat=coords[0],
-            lon=coords[1]
+            node_type_id=available_node_types[node_type]
         )
+
+        node.x, node.y, node.zone_number, node.zone_letter = utm.from_latlon(*coords)
+
+        yield node
 
 def get_node_coords(elm, cache):
     children = list(elm.iterchildren('nd'))

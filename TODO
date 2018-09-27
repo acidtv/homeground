@@ -18,3 +18,5 @@ https://gis.stackexchange.com/questions/230160/converting-wgs84-to-ecef-in-pytho
 + Set minimum zoom level for queries
 
  * Let server decide based on bounding box
+
++ Set default radius in meters
