@@ -1,6 +1,7 @@
 from shapely.ops import cascaded_union
 from shapely.geometry import Point, MultiPolygon
 from itertools import groupby
+from functools import reduce
 import utm
 
 def node_intersections(nodes, bounds):
@@ -12,10 +13,12 @@ def node_intersections(nodes, bounds):
     polygon_groups = polygonize_groups(node_groups)
 
     # calculating intersections does not work with an iterator :(
-    intersections = calculate_group_intersections(list(polygon_groups))
+    intersections = polygon_intersections(polygon_groups)
+
+    if not isinstance(intersections, MultiPolygon):
+        intersections = MultiPolygon([intersections])
 
     # convert to wgs84
-    #wgs84_polygon_groups = polygongroups_to_latlon(polygon_groups, zone_number, zone_letter)
     wgs84_intersections = polygons_to_latlon(intersections, zone_number, zone_letter)
 
     return wgs84_intersections
@@ -61,7 +64,7 @@ def polygonize(nodes):
     polygons = cascaded_union(seperate_polygons)
 
     if not isinstance(polygons, MultiPolygon):
-        polygons = [polygons]
+        polygons = MultiPolygon([polygons])
 
     return polygons
 
@@ -70,15 +73,5 @@ def to_latlon(coords, zone_number, zone_letter):
     return [utm.to_latlon(lat, lon, zone_number, zone_letter) for lat, lon in coords]
 
 
-def calculate_group_intersections(polygon_groups):
-    # loop polygon groups
-    for id, group in enumerate(polygon_groups):
-        # loop polygons in group
-        for polygon in group:
-            # loop over groups farther in this list to check for intersections
-            for next_group in polygon_groups[id+1:]:
-                for next_polygon in next_group:
-                    intersection = polygon.intersection(next_polygon)
-
-                    if intersection:
-                        yield intersection
+def polygon_intersections(polygons):
+    return reduce(lambda a, b: a.intersection(b), polygons)
