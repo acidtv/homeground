@@ -69,9 +69,16 @@ function update_map(filter, bounds) {
 		function(data) {
 			clear_map();
 
-			data.forEach(function(polygon) {
-				feature_layers.push(L.polygon(polygon, {color: 'red'}).addTo(map));
-			});
+			if ('error' in data) {
+				// display error
+
+			}
+
+			if ('polygons' in data) {
+				data['polygons'].forEach(function(polygon) {
+					feature_layers.push(L.polygon(polygon, {color: 'red'}).addTo(map));
+				});
+			}
 	})
 }
 
@@ -100,4 +107,8 @@ function map_search(query) {
 			
 			map.flyToBounds(bounds, {maxZoom: 17});
 		})
+}
+
+function notification(text) {
+	$('.notifications').append("<div>" + text + "</div>");
 }

@@ -5,12 +5,29 @@ body {
 	font-size: 15px;
 }
 
+div {
+	box-sizing: border-box;
+}
+
+.notifications div {
+	position: absolute;
+	border: 3px solid #AAA;
+	padding: 1em;
+	top: 2em;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	width: 90%;
+	z-index: 99999;
+	background: white;
+	text-align: center;
+}
+
 .menu {
 	background: white;
 	position: absolute;
 	width: 100%;
 	z-index: 9999;
-	box-sizing: border-box;
 }
 
 .menu .title {
@@ -84,6 +101,10 @@ body {
 
 /* style for desktop layout */
 @media screen and (min-width: 50em) {
+	.notifications div {
+		width: 50%;
+	}
+
 	.menu {
 		width: 300px;
 		left: 0;

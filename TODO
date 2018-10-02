@@ -1,8 +1,4 @@
 
-+ Let user set radius per feature.
-
- * How to make a clear user interface?
-
 + Clean up output polygons.
 
  * smooth outline to remove weird glitches
