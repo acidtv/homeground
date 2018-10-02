@@ -6,11 +6,36 @@ body {
 }
 
 .menu {
-	width: 270px;
 	background: white;
-	padding: 15px;
 	position: absolute;
-	left: 0;
+	width: 100%;
+	z-index: 9999;
+	box-sizing: border-box;
+}
+
+.menu .title {
+	float: left;
+	line-height: 2rem;
+	margin: 1rem;
+	font-size: 1.5rem;
+}
+
+.menu .toggle-menu {
+	float: right;
+	line-height: 2rem;
+	margin: 1rem;
+}
+
+.menu .content {
+	display: none;
+	padding: 15px;
+	clear: both;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.menu .content.show-mobile {
+	display: block;
 }
 
 .menu form li {
@@ -20,6 +45,7 @@ body {
 .menu .features ul {
 	padding-left: 1em;
 	padding-right: 1em;
+	max-width: 20rem;
 }
 
 .menu .features li {
@@ -51,7 +77,34 @@ body {
 
 #map {
 	position: absolute;
-	left: 300px;
-	right: 0px;
-	height: 100%;
+	top: 4rem;
+	bottom: 0px;
+	width: 100%;
+}
+
+/* style for desktop layout */
+@media screen and (min-width: 50em) {
+	.menu {
+		width: 300px;
+		left: 0;
+	}
+
+	.menu .content {
+		display: block;
+	}
+
+	.menu .toggle-menu {
+		display: none;
+	}
+
+	.menu .features ul {
+		max-width: none;
+	}
+
+	#map {
+		top: 0px;
+		left: 300px;
+		right: 0px;
+		height: 100%;
+	}
 }

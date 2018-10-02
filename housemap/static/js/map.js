@@ -9,6 +9,7 @@ function init() {
 	// update map with newly selected features
 	$('.menu form.features').on('submit', function(event) {
 		update_map_by_form();
+		toggle_menu();
 		event.preventDefault();
 	});
 
@@ -19,12 +20,22 @@ function init() {
 	$('.menu form.search').on('submit', function(event) {
 		query = $('input[name=q]', event.target).val();
 		map_search(query);
+		toggle_menu();
 		event.preventDefault();
 	});
 
 	$('.menu form.features input.feature_check').on('change', function(event) {
 		$(event.currentTarget).parents('li').toggleClass('active');
 	});
+
+	$('.menu .toggle-menu').on('click', function(event) {
+		toggle_menu();
+		event.preventDefault();
+	})
+}
+
+function toggle_menu() {
+	$('.menu .content').toggleClass('show-mobile');
 }
 
 function init_map() {

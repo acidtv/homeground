@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/static/css/housemap.css" />
 		<link rel="stylesheet" href="/static/css/leaflet.css" />
 		<script src="/static/js/jquery-3.3.1.min.js"></script>
@@ -15,40 +16,45 @@
 	</head>
 	<body>
 		<div class="menu">
-			<h1>Housemap</h1>
+			<h1 class="title">Housemap</h1>
 
-			<form class="search">
-				<input name="q" />
-				<input type="submit" value="Search" />
-			</form>
+			<a href="" class="toggle-menu">Menu</a>
 
-			<p>Select neighborhood features:</p>
-			<form class="features">
-			<ul>
-				{% for node_type in node_types: %}
-					<li>
-						<input
-							type="checkbox"
-							id="{{ node_type.name }}"
-							name="features"
-							value="{{ node_type.id }}"
-							class="feature_check" />
+			<div class="content">
+				<form class="search">
+					<input name="q" />
+					<input type="submit" value="Search" />
+				</form>
 
-						<label for="{{ node_type.name }}">
-							{{ node_type.name }}
-						</label>
+				<p>Select neighborhood features:</p>
+				<form class="features">
+				<ul>
+					{% for node_type in node_types: %}
+						<li>
+							<input
+								type="checkbox"
+								id="{{ node_type.name }}"
+								name="features"
+								value="{{ node_type.id }}"
+								class="feature_check" />
 
-						<select name="radius" class="radius">
-							{% for key, value in ranges: %}
-								<option value="{{ node_type.id }},{{ key }}" {% if key == node_type.default_radius: %} selected="selected"{% endif %}>{{ value }}</option>
-							{% endfor %}
-						</select>
-					</li>
-				{% endfor %}
-			</ul>
-			<input type="submit" />
-			</form>
+							<label for="{{ node_type.name }}">
+								{{ node_type.name }}
+							</label>
+
+							<select name="radius" class="radius">
+								{% for key, value in ranges: %}
+									<option value="{{ node_type.id }},{{ key }}" {% if key == node_type.default_radius: %} selected="selected"{% endif %}>{{ value }}</option>
+								{% endfor %}
+							</select>
+						</li>
+					{% endfor %}
+				</ul>
+				<input type="submit" />
+				</form>
+			</div>
 		</div>
+
 		<div id="map"></div>
 	</body>
 </html>
