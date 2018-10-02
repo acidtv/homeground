@@ -4,14 +4,15 @@ from itertools import groupby
 from functools import reduce
 import utm
 
-def node_intersections(nodes, min_count):
+
+def node_intersections(nodes, min_layers, type_radius):
     # group by second elemnt, node_type_id
     node_groups = group_nodes(nodes, 2)
 
-    polygon_groups = polygonize_groups(node_groups)
+    polygon_groups = polygonize_groups(node_groups, type_radius)
     count, intersections = polygon_intersections(polygon_groups)
 
-    if count < min_count:
+    if count < min_layers:
         raise TooFewNodeTypesException()
 
     if not isinstance(intersections, MultiPolygon):
@@ -29,9 +30,9 @@ def polygons_to_latlon(polygons, zone_number, zone_letter):
     return [to_latlon(polygon.exterior.coords, zone_number, zone_letter) for polygon in polygons]
 
 
-def polygonize_groups(node_groups):
+def polygonize_groups(node_groups, type_radius):
     for group in node_groups:
-        yield polygonize(group)
+        yield polygonize(group, type_radius)
 
 
 def group_nodes(nodes, groupby_key):
@@ -39,15 +40,14 @@ def group_nodes(nodes, groupby_key):
         yield group
 
 
-def polygonize(nodes):
+def polygonize(nodes, type_radius):
     if not nodes:
         return []
 
     # default radius in meters
-    base_radius = 200
     resolution = 8
 
-    seperate_polygons = [Point(lat, lon).buffer(base_radius * radius, resolution) for lat, lon, type_id, radius in nodes]
+    seperate_polygons = [Point(lat, lon).buffer(type_radius[type_id], resolution) for lat, lon, type_id in nodes]
     polygons = cascaded_union(seperate_polygons)
 
     if not isinstance(polygons, MultiPolygon):

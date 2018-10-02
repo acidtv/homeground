@@ -6,15 +6,47 @@ body {
 }
 
 .menu {
-	width: 300px;
+	width: 270px;
 	background: white;
-	padding: 1em;
+	padding: 15px;
 	position: absolute;
 	left: 0;
 }
 
 .menu form li {
 	list-style: none;
+}
+
+.menu .features ul {
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.menu .features li {
+	padding: .25em;
+	/* reserve space for border when selected */
+	border-bottom: 1px solid white;
+}
+
+.menu .features li.active {
+	background-color: #d8f5d3;
+	border-bottom: 1px solid #CCC;
+}
+
+.menu .features .feature_check {
+	vertical-align: middle;
+}
+
+.menu .features .feature_check ~ .radius {
+	display: none;
+}
+
+.menu .features .feature_check:checked ~ .radius {
+	display: inline;
+}
+
+.menu .features .radius {
+	float: right;
 }
 
 #map {

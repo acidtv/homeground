@@ -6,17 +6,37 @@ from housemap import app, db
 from flask import render_template, jsonify, request, abort
 import utm
 
+
 @app.route("/")
 def index():
+    ranges = [
+        [50, '50m'],
+        [100, '100m'],
+        [150, '150m'],
+        [200, '200m'],
+        [250, '250m'],
+        [300, '300m'],
+        [400, '400m'],
+        [500, '500m'],
+        [600, '600m'],
+        [750, '750m'],
+        [1000, '1km'],
+        [1250, '1.25km'],
+        [1500, '1.5km'],
+        [2000, '2km'],
+    ]
+
     return render_template(
         'index.html',
-        node_types=db.session.query(NodeType).all()
+        node_types=db.session.query(NodeType).all(),
+        ranges=ranges
     )
 
 
 @app.route("/api/nodes")
 def nodes():
     node_types = request.args.getlist('features')
+    radius = dict([map(int, value.split(',')) for value in request.args.getlist('radius')])
 
     try:
         bounds = request.args.get('bounds').split(',')
@@ -35,7 +55,7 @@ def nodes():
 
     # Select nodes. I'm going to assume all nodes within these bounds belong to
     # the same utm zone number/letter for now.
-    nodes = db.session.query(Node.x, Node.y, Node.node_type_id, NodeType.default_radius) \
+    nodes = db.session.query(Node.x, Node.y, Node.node_type_id) \
         .join(Node.node_type) \
         .filter(
             Node.node_type_id.in_(node_types),
@@ -48,7 +68,7 @@ def nodes():
         .all()
 
     try:
-        intersections = nodetools.node_intersections(nodes, len(node_types))
+        intersections = nodetools.node_intersections(nodes, min_layers=len(node_types), type_radius=radius)
     except TooFewNodeTypesException:
         intersections = []
 

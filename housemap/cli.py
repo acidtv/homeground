@@ -17,16 +17,16 @@ def init_db():
 def add_nodetypes():
     session = db.session()
 
-    # FIXME use config
+    # FIXME use config file
     session.add_all([
-        NodeType(name='busstop', default_radius=1),
-        NodeType(name='shop', default_radius=1),
-        NodeType(name='bakery', default_radius=1),
-        NodeType(name='pub', default_radius=1),
-        NodeType(name='supermarket', default_radius=1.5),
-        NodeType(name='sports-centre', default_radius=1.5),
-        NodeType(name='childcare', default_radius=2),
-        NodeType(name='railway-station', default_radius=3),
+        NodeType(name='busstop', default_radius=150),
+        NodeType(name='shop', default_radius=150),
+        NodeType(name='bakery', default_radius=150),
+        NodeType(name='pub', default_radius=150),
+        NodeType(name='supermarket', default_radius=200),
+        NodeType(name='sports-centre', default_radius=200),
+        NodeType(name='childcare', default_radius=200),
+        NodeType(name='railway-station', default_radius=1000),
     ])
 
     session.commit()

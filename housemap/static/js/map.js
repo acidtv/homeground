@@ -14,13 +14,17 @@ function init() {
 
 	$(map).on('moveend', function(event) {
 		update_map_by_form();
-	})
+	});
 
 	$('.menu form.search').on('submit', function(event) {
 		query = $('input[name=q]', event.target).val();
 		map_search(query);
 		event.preventDefault();
-	})
+	});
+
+	$('.menu form.features input.feature_check').on('change', function(event) {
+		$(event.currentTarget).parents('li').toggleClass('active');
+	});
 }
 
 function init_map() {

@@ -8,15 +8,6 @@
  * smooth outline to remove weird glitches
  * remove useless small patches
 
-+ Internally use cartesian coordinates for storage and calculations, so:
-
- * Convert coords to ECEF on import 
- * Convert coords to WGS84 lat/lon for output
-
-https://gis.stackexchange.com/questions/230160/converting-wgs84-to-ecef-in-python
-
 + Set minimum zoom level for queries
 
  * Let server decide based on bounding box
-
-+ Set default radius in meters

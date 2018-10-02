@@ -1,5 +1,6 @@
 import shelve
 import utm
+import os
 from statistics import mean
 from .models import Node
 from lxml import etree
@@ -20,9 +21,10 @@ type_map = {
 def nodes(filename, node_types):
     catch = ['node', 'way']
     used = ['tag', 'nd']
+    cachefile = 'osm-import-cache'
 
     # use disk based node lat-lon cache
-    with shelve.open('osm-import-cache') as cache:
+    with shelve.open(cachefile) as cache:
         with open(filename, 'rb') as file:
             xml_context = etree.iterparse(file, events=('end',))
 
@@ -52,6 +54,7 @@ def nodes(filename, node_types):
                     while elm.getprevious() is not None:
                         del elm.getparent()[0]
 
+    os.remove(cachefile)
 
 
 def make_nodes(elm, available_node_types, cache):

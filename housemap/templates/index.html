@@ -26,7 +26,24 @@
 			<form class="features">
 			<ul>
 				{% for node_type in node_types: %}
-					<li><input type="checkbox" id="{{ node_type.name }}" name="features" value="{{ node_type.id }}" /><label for="{{ node_type.name }}">{{ node_type.name }}</label></li>
+					<li>
+						<input
+							type="checkbox"
+							id="{{ node_type.name }}"
+							name="features"
+							value="{{ node_type.id }}"
+							class="feature_check" />
+
+						<label for="{{ node_type.name }}">
+							{{ node_type.name }}
+						</label>
+
+						<select name="radius" class="radius">
+							{% for key, value in ranges: %}
+								<option value="{{ node_type.id }},{{ key }}" {% if key == node_type.default_radius: %} selected="selected"{% endif %}>{{ value }}</option>
+							{% endfor %}
+						</select>
+					</li>
 				{% endfor %}
 			</ul>
 			<input type="submit" />
