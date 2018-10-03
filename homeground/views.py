@@ -39,6 +39,10 @@ def nodes():
     node_types = request.args.getlist('features')
     radius = dict([map(int, value.split(',')) for value in request.args.getlist('radius')])
 
+    if not node_types:
+        # nothing to look for...
+        return jsonify({})
+
     try:
         bounds = request.args.get('bounds').split(',')
     except TypeError:
