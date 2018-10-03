@@ -40,8 +40,19 @@ div {
 .menu .toggle-menu {
 	float: right;
 	line-height: 2rem;
-	margin: 1rem;
+	margin: 1.3rem;
+	padding: 4px 0;
+	background-color: black;
 }
+
+.menu .toggle-menu:before {
+	content: "";
+	display: block;
+	border-top: 4px solid white;
+	border-bottom: 4px solid white;
+	width: 2em;
+	height: 4px;
+} 
 
 .menu .content {
 	display: none;

@@ -54,7 +54,7 @@ function init_map() {
 	});
 
 	L.control.zoom({
-		position:'topright'
+		position:'bottomright'
 	}).addTo(map);
 
 	return map;
