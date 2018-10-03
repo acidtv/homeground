@@ -1,9 +1,9 @@
++ Load nodes from $radius outside of bounds
+
+ * So polygons on the edge of the screen aren't hidden until you move
 
 + Clean up output polygons.
 
  * smooth outline to remove weird glitches
  * remove useless small patches
 
-+ Set minimum zoom level for queries
-
- * Let server decide based on bounding box
