@@ -35,6 +35,7 @@ def index():
 
 @app.route("/api/nodes")
 def nodes():
+    max_viewport_area = 15000 * 15000 # 15km * 15km
     node_types = request.args.getlist('features')
     radius = dict([map(int, value.split(',')) for value in request.args.getlist('radius')])
 
@@ -50,6 +51,9 @@ def nodes():
         # lower right bound lat/lon
         utm.from_latlon(float(bounds[3]), float(bounds[2]))
     )
+
+    if nodetools.bounds_area(bounds) > max_viewport_area:
+        return jsonify({'error': 'Zoom in to view the results'})
 
     zone_number, zone_letter = bounds[0][2:4]
 
@@ -73,6 +77,10 @@ def nodes():
         intersections = []
 
     # Convert back to WGS84.
-    wgs84_intersections = nodetools.polygons_to_latlon(intersections, zone_number, zone_letter)
+    latlon_intersections = nodetools.polygons_to_latlon(intersections, zone_number, zone_letter)
 
-    return jsonify(wgs84_intersections)
+    data = {
+        'polygons': latlon_intersections
+    }
+
+    return jsonify(data)

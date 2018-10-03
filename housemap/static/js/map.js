@@ -68,10 +68,10 @@ function update_map(filter, bounds) {
 		$.param(filter),
 		function(data) {
 			clear_map();
+			clear_notifications();
 
 			if ('error' in data) {
-				// display error
-
+				notification(data['error']);
 			}
 
 			if ('polygons' in data) {
@@ -111,4 +111,10 @@ function map_search(query) {
 
 function notification(text) {
 	$('.notifications').append("<div>" + text + "</div>");
+
+	window.setTimeout(clear_notifications, 10000);
+}
+
+function clear_notifications() {
+	$('.notifications div').remove();
 }

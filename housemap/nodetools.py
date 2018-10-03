@@ -76,5 +76,9 @@ def zone_by_latlon(lat, lon):
     return zone_number, zone_letter
 
 
+def bounds_area(bounds):
+    return (bounds[1][0] - bounds[0][0]) * (bounds[1][1] - bounds[0][1])
+
+
 class TooFewNodeTypesException(Exception):
     pass
