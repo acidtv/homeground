@@ -35,7 +35,7 @@ function init() {
 }
 
 function toggle_menu() {
-	$('.menu .content').toggleClass('show-mobile');
+	$('.menu').toggleClass('show-mobile');
 }
 
 function init_map() {

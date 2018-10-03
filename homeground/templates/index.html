@@ -5,23 +5,21 @@
 		<link rel="stylesheet" href="/static/css/leaflet.css" />
 		<script src="/static/js/jquery-3.3.1.min.js"></script>
 		<script src="/static/js/leaflet.js"></script>
-		<script src="/static/js/heatmap.min.js"></script>
-		<script src="/static/js/leaflet-heatmap.js"></script>
 		<script src="/static/js/map.js"></script>
 		<script>
-			$(document).ready(function() {
-				init();
-			})
+			$(document).ready(function() { init(); })
 		</script>
 	</head>
 	<body>
 		<div class="notifications"></div>
 
-		<div class="menu">
-			<h1 class="title">Homeground</h1>
-			<a href="" class="toggle-menu"></a>
+		<div class="menu show-mobile">
+			<div class="header">
+				<h1 class="title">Homeground</h1>
+				<a href="" class="toggle-menu"></a>
+			</div>
 
-			<div class="content show-mobile">
+			<div class="content">
 				<form class="search">
 					<input name="q" />
 					<input type="submit" value="Search" />
@@ -29,30 +27,36 @@
 
 				<p>Select neighborhood features:</p>
 				<form class="features">
-				<ul>
-					{% for node_type in node_types: %}
-						<li>
-							<input
-								type="checkbox"
-								id="{{ node_type.name }}"
-								name="features"
-								value="{{ node_type.id }}"
-								class="feature_check" />
+					<ul>
+						{% for node_type in node_types: %}
+							<li>
+								<input
+									type="checkbox"
+									id="{{ node_type.name }}"
+									name="features"
+									value="{{ node_type.id }}"
+									class="feature_check" />
 
-							<label for="{{ node_type.name }}">
-								{{ node_type.name }}
-							</label>
+								<label for="{{ node_type.name }}">
+									{{ node_type.name }}
+								</label>
 
-							<select name="radius" class="radius">
-								{% for key, value in ranges: %}
-									<option value="{{ node_type.id }},{{ key }}" {% if key == node_type.default_radius: %} selected="selected"{% endif %}>{{ value }}</option>
-								{% endfor %}
-							</select>
-						</li>
-					{% endfor %}
-				</ul>
-				<input type="submit" />
+								<select name="radius" class="radius">
+									{% for key, value in ranges: %}
+										<option value="{{ node_type.id }},{{ key }}" {% if key == node_type.default_radius: %} selected="selected"{% endif %}>{{ value }}</option>
+									{% endfor %}
+								</select>
+							</li>
+						{% endfor %}
+					</ul>
+					<input type="submit" />
 				</form>
+
+				<div class="intro">
+					Homeground is a site to help you find a suitable area to live. By selecting the things
+					you find important to have nearby it shows you the parts of town that meet these requirements,
+					so you know where to look for a new home.
+				</div>
 			</div>
 		</div>
 

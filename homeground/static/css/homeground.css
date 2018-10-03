@@ -30,6 +30,15 @@ div {
 	z-index: 9999;
 }
 
+.menu.show-mobile {
+	height: 100%;
+}
+
+.menu .header {
+	border-bottom: 1px solid #CCC;
+	height: 4rem;
+}
+
 .menu .title {
 	float: left;
 	line-height: 2rem;
@@ -60,9 +69,20 @@ div {
 	clear: both;
 	width: 100%;
 	box-sizing: border-box;
+	overflow-y: auto;
 }
 
-.menu .content.show-mobile {
+.menu .content .intro {
+	border: 1px solid #CCC;
+    padding: 1em;
+    background: #EFEFEF;
+    font-size: .9em;
+    line-height: 1.4em;
+    color: #444;
+	margin-top: 1em;
+}
+
+.menu.show-mobile .content {
 	display: block;
 }
 
@@ -103,7 +123,7 @@ div {
 	float: right;
 }
 
-#map {
+#map, .menu .content {
 	position: absolute;
 	top: 4rem;
 	left: 0px;
@@ -120,6 +140,18 @@ div {
 	.menu {
 		width: 300px;
 		left: 0;
+		height: 100%;
+		border-right: 1px solid #CCC;
+	}
+
+	.menu .header {
+		border-bottom: 0px;
+	}
+
+	.menu .header .title {
+		width: 100%;
+		text-align: center;
+		margin: 1rem 0;
 	}
 
 	.menu .content {
