@@ -43,14 +43,21 @@ function init_map() {
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		maxZoom: 18,
 		id: 'mapbox.streets',
-		accessToken: 'pk.eyJ1IjoiYWxleC1ydWNvbGEiLCJhIjoiY2pscncyODJnMDk1bDNrbGI3dWtpbmdyNSJ9.Ary5QUiC-HZOizD7N8ping'
+		accessToken: 'pk.eyJ1IjoiYWxleC1ydWNvbGEiLCJhIjoiY2pscncyODJnMDk1bDNrbGI3dWtpbmdyNSJ9.Ary5QUiC-HZOizD7N8ping',
 	});
 
-	return new L.Map('map', {
+	map = new L.Map('map', {
 		center: new L.LatLng(52.08, 4.33),
 		zoom: 12,
-		layers: [baselayer]
+		layers: [baselayer],
+		zoomControl: false
 	});
+
+	L.control.zoom({
+		position:'topright'
+	}).addTo(map);
+
+	return map;
 }
 
 function update_map_by_form() {

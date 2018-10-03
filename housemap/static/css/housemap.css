@@ -13,7 +13,7 @@ div {
 	position: absolute;
 	border: 3px solid #AAA;
 	padding: 1em;
-	top: 2em;
+	bottom: 3em;
 	margin: 0 auto;
 	left: 0;
 	right: 0;
@@ -95,8 +95,9 @@ div {
 #map {
 	position: absolute;
 	top: 4rem;
+	left: 0px;
+	right: 0px;
 	bottom: 0px;
-	width: 100%;
 }
 
 /* style for desktop layout */
@@ -125,7 +126,6 @@ div {
 	#map {
 		top: 0px;
 		left: 300px;
-		right: 0px;
 		height: 100%;
 	}
 }
