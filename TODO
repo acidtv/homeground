@@ -7,3 +7,8 @@
  * smooth outline to remove weird glitches
  * remove useless small patches
 
++ Being able to select 'forest' or 'park'
+
+ * Calculations would have to happen based on a polygon instead of a point
+ * Make a seperate flow for this use-case?
+ * How to store these polygons? In nodes, or a new table?
