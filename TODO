@@ -1,3 +1,5 @@
++ Rename to Homeground
+
 + Load nodes from $radius outside of bounds
 
  * So polygons on the edge of the screen aren't hidden until you move
@@ -6,6 +8,11 @@
 
  * smooth outline to remove weird glitches
  * remove useless small patches
+
++ Profile query and pipeline
+
+ * To see where stuff can be optimized to make reqs for polygons faster
+ * Add some indexes
 
 + Being able to select 'forest' or 'park'
 
