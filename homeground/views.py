@@ -2,7 +2,7 @@ from sqlalchemy import between
 from . import nodetools
 from .models import Node, NodeType
 from .nodetools import TooFewNodeTypesException
-from housemap import app, db
+from homeground import app, db
 from flask import render_template, jsonify, request, abort
 import utm
 

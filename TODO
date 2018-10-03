@@ -1,5 +1,3 @@
-+ Rename to Homeground
-
 + Load nodes from $radius outside of bounds
 
  * So polygons on the edge of the screen aren't hidden until you move

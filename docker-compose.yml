@@ -9,6 +9,6 @@ services:
             - .:/usr/src/app
         environment:
             - FLASK_DEBUG=1
-            - FLASK_APP=housemap
+            - FLASK_APP=homeground
             - FLASK_ENV=development
-            - HOUSEMAP_SETTINGS=default.cfg
+            - HOMEGROUND_SETTINGS=default.cfg

@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='housemap',
-    packages=['housemap'],
+    name='homeground',
+    packages=['homeground'],
     include_package_data=True,
     install_requires=[
         'flask',

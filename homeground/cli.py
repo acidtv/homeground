@@ -1,6 +1,6 @@
 import click
 import itertools
-from housemap import app, db
+from homeground import app, db
 from .models import NodeType
 from . import osm
 

@@ -1,4 +1,4 @@
-from housemap import db
+from homeground import db
 
 
 class NodeType(db.Model):
