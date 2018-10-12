@@ -1,8 +1,3 @@
-+ If bounds are smaller after zooming, don't do a query
-
- * If zooming out and new bounds are still smaller or equal
-   as old bounds - and features haven't changed - also don't
-   do a new query.
 
 + Load nodes from $radius outside of bounds
 
