@@ -1,10 +1,14 @@
 var map;
 var form;
 var feature_layers = [];
+var last_bounds;
+var last_filter;
 
 function init() {
 	map = init_map();
 	form = $('.menu form.features');
+
+	last_filter = [];
 
 	// update map with newly selected features
 	$('.menu form.features').on('submit', function(event) {
@@ -15,6 +19,10 @@ function init() {
 
 	$(map).on('moveend', function(event) {
 		update_map_by_form();
+	});
+
+	$(map).on('movestart', function(event) {
+		last_bounds = map.getBounds();
 	});
 
 	$('.menu form.search').on('submit', function(event) {
@@ -61,14 +69,24 @@ function init_map() {
 }
 
 function update_map_by_form() {
-	update_map(
-		form.serializeArray(),
-		map.getBounds()
-	);
+	bounds = map.getBounds();
+	filter = form.serializeArray();
+
+	if (last_bounds.contains(bounds) && (JSON.stringify(last_filter) == JSON.stringify(filter)))
+	{
+		// same query and new bounds are smaller than last bounds, so don't do a new query
+		console.log('same');
+		return;
+	}
+
+	last_filter = filter;
+
+	update_map(filter, bounds);
 }
 
 function update_map(filter, bounds) {
 	filter.push({name: 'bounds', value: bounds.toBBoxString()});
+
 
 	$.getJSON(
 		'/api/nodes', 
