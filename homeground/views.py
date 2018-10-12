@@ -1,7 +1,7 @@
 from sqlalchemy import between
 from . import nodetools
 from .models import Node, NodeType
-from .nodetools import TooFewNodeTypesException
+from .nodetools import TooFewNodeTypesException, to_latlon, node_intersections
 from homeground import app, db
 from flask import render_template, jsonify, request, abort
 import utm
@@ -76,12 +76,12 @@ def nodes():
         .all()
 
     try:
-        intersections = nodetools.node_intersections(nodes, min_layers=len(node_types), type_radius=radius)
+        intersections = node_intersections(nodes, min_layers=len(node_types), type_radius=radius)
     except TooFewNodeTypesException:
         intersections = []
 
     # Convert back to WGS84.
-    latlon_intersections = nodetools.polygons_to_latlon(intersections, zone_number, zone_letter)
+    latlon_intersections = [list(to_latlon(polygon.exterior.coords, zone_number, zone_letter)) for polygon in intersections]
 
     data = {
         'polygons': latlon_intersections

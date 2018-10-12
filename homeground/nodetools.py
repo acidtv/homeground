@@ -6,11 +6,11 @@ import utm
 
 
 def node_intersections(nodes, min_layers, type_radius):
-    # group by second elemnt, node_type_id
+    # group by second element, node_type_id
     node_groups = group_nodes(nodes, 2)
 
-    polygon_groups = polygonize_groups(node_groups, type_radius)
-    count, intersections = polygon_intersections(polygon_groups)
+    polygon_groups = (polygonize(group, type_radius) for group in node_groups)
+    count, intersections = counting_reduce(lambda a, b: a.intersection(b), polygon_groups, MultiPolygon([]))
 
     if count < min_layers:
         raise TooFewNodeTypesException()
@@ -19,20 +19,6 @@ def node_intersections(nodes, min_layers, type_radius):
         intersections = MultiPolygon([intersections])
 
     return intersections
-
-
-def polygongroups_to_latlon(polygon_groups, zone_number, zone_letter):
-    for polygons in polygon_groups:
-        yield polygons_to_latlon(polygons, zone_number, zone_letter)
-
-
-def polygons_to_latlon(polygons, zone_number, zone_letter):
-    return [to_latlon(polygon.exterior.coords, zone_number, zone_letter) for polygon in polygons]
-
-
-def polygonize_groups(node_groups, type_radius):
-    for group in node_groups:
-        yield polygonize(group, type_radius)
 
 
 def group_nodes(nodes, groupby_key):
@@ -47,7 +33,9 @@ def polygonize(nodes, type_radius):
     # default radius in meters
     resolution = 8
 
+    # this cannot be a generator comprehension, because shapely wants to do a len() on it
     seperate_polygons = [Point(lat, lon).buffer(type_radius[type_id], resolution) for lat, lon, type_id in nodes]
+
     polygons = cascaded_union(seperate_polygons)
 
     if not isinstance(polygons, MultiPolygon):
@@ -57,11 +45,7 @@ def polygonize(nodes, type_radius):
 
 
 def to_latlon(coords, zone_number, zone_letter):
-    return [utm.to_latlon(lat, lon, zone_number, zone_letter) for lat, lon in coords]
-
-
-def polygon_intersections(polygons):
-    return counting_reduce(lambda a, b: a.intersection(b), polygons, MultiPolygon([]))
+    return (utm.to_latlon(lat, lon, zone_number, zone_letter) for lat, lon in coords)
 
 
 def counting_reduce(func, data, initial):
