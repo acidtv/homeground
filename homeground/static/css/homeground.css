@@ -63,6 +63,7 @@ div {
 	height: 4px;
 } 
 
+
 .menu .content {
 	display: none;
 	padding: 15px;
@@ -152,6 +153,19 @@ div {
 		width: 100%;
 		text-align: center;
 		margin: 1rem 0;
+	}
+
+	.menu .search {
+		margin: 0;
+		padding: 0;
+	}
+
+	.menu .search .q {
+		width: 70%;
+	}
+
+	.menu .search .submit {
+		width: 27%;
 	}
 
 	.menu .content {
