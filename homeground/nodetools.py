@@ -18,7 +18,10 @@ def node_intersections(nodes, min_layers, type_radius):
     if not isinstance(intersections, MultiPolygon):
         intersections = MultiPolygon([intersections])
 
-    return intersections
+    min_area = 2000
+    filtered = filter(lambda polygon: polygon.area > min_area, intersections)
+
+    return filtered
 
 
 def group_nodes(nodes, groupby_key):

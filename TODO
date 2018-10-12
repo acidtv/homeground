@@ -6,11 +6,9 @@
 + Clean up output polygons.
 
  * smooth outline to remove weird glitches
- * remove useless small patches
 
-+ Profile query and pipeline
++ Profile query
 
- * To see where stuff can be optimized to make reqs for polygons faster
  * Add some indexes
 
 + Being able to select 'forest' or 'park'
