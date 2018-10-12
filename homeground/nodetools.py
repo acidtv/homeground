@@ -9,7 +9,10 @@ def node_intersections(nodes, min_layers, type_radius):
     # group by second element, node_type_id
     node_groups = group_nodes(nodes, 2)
 
+    # turn nodes into polygons with buffer()
     polygon_groups = (polygonize(group, type_radius) for group in node_groups)
+
+    # merge polygons
     count, intersections = counting_reduce(lambda a, b: a.intersection(b), polygon_groups, MultiPolygon([]))
 
     if count < min_layers:
@@ -18,6 +21,7 @@ def node_intersections(nodes, min_layers, type_radius):
     if not isinstance(intersections, MultiPolygon):
         intersections = MultiPolygon([intersections])
 
+    # remove polygons smaller than min_area
     min_area = 2000
     filtered = filter(lambda polygon: polygon.area > min_area, intersections)
 
@@ -34,7 +38,7 @@ def polygonize(nodes, type_radius):
         return []
 
     # default radius in meters
-    resolution = 8
+    resolution = 6
 
     # this cannot be a generator comprehension, because shapely wants to do a len() on it
     seperate_polygons = [Point(lat, lon).buffer(type_radius[type_id], resolution) for lat, lon, type_id in nodes]
