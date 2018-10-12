@@ -64,7 +64,6 @@ def nodes():
     # Select nodes. I'm going to assume all nodes within these bounds belong to
     # the same utm zone number/letter for now.
     nodes = db.session.query(Node.x, Node.y, Node.node_type_id) \
-        .join(Node.node_type) \
         .filter(
             Node.node_type_id.in_(node_types),
             between(Node.x, bounds[0][0], bounds[1][0]),

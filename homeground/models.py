@@ -21,3 +21,7 @@ class Node(db.Model):
     zone_letter = db.Column(db.String(length=1))
 
     node_type = db.relationship('NodeType')
+
+    __table_args__ = (
+        db.Index('all', 'node_type_id', 'x', 'y', 'zone_number', 'zone_letter'),
+    )
