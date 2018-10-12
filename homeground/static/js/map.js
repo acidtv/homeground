@@ -1,13 +1,14 @@
 var map;
 var form;
 var feature_layers = [];
-var last_bounds;
+var last_filter_bounds;
 var last_filter;
 
 function init() {
 	map = init_map();
 	form = $('.menu form.features');
 
+	last_filter_bounds = map.getBounds();
 	last_filter = [];
 
 	// update map with newly selected features
@@ -22,7 +23,11 @@ function init() {
 	});
 
 	$(map).on('movestart', function(event) {
-		last_bounds = map.getBounds();
+		if ( ! last_filter_bounds.contains(map.getBounds()))
+		{
+			// expand last filter bounds
+			last_filter_bounds = map.getBounds();
+		}
 	});
 
 	$('.menu form.search').on('submit', function(event) {
@@ -72,25 +77,32 @@ function update_map_by_form() {
 	bounds = map.getBounds();
 	filter = form.serializeArray();
 
-	if (last_bounds.contains(bounds) && (JSON.stringify(last_filter) == JSON.stringify(filter)))
+	cmp_last_filter = JSON.stringify(last_filter);
+	cmp_filter = JSON.stringify(filter);
+
+	if (cmp_last_filter != cmp_filter)
+	{
+		// save bounds if filter changed, so we know we have the results for that query within these bounds
+		last_filter_bounds = bounds;
+		last_filter = filter;
+	}
+	else if (last_filter_bounds.contains(bounds))
 	{
 		// same query and new bounds are smaller than last bounds, so don't do a new query
-		console.log('same');
 		return;
 	}
-
-	last_filter = filter;
 
 	update_map(filter, bounds);
 }
 
 function update_map(filter, bounds) {
-	filter.push({name: 'bounds', value: bounds.toBBoxString()});
-
+	// copy filter and create query array with bounds
+	query = filter.slice();
+	query.push({name: 'bounds', value: bounds.toBBoxString()});
 
 	$.getJSON(
 		'/api/nodes', 
-		$.param(filter),
+		$.param(query),
 		function(data) {
 			clear_map();
 			clear_notifications();
