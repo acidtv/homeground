@@ -25,7 +25,7 @@
 					<input class="submit" type="submit" value="Search" />
 				</form>
 
-				<p>Select neighborhood features:</p>
+				<p>Show places near:</p>
 				<form class="features">
 					<ul>
 						{% for node_type in node_types: %}
@@ -49,13 +49,19 @@
 							</li>
 						{% endfor %}
 					</ul>
-					<input type="submit" />
+					<input type="submit" value="Update map" />
 				</form>
 
 				<div class="intro">
 					Homeground is a site to help you find a suitable area to live. By selecting the things
 					you find important to have nearby it shows you the parts of town that meet these requirements,
 					so you know where to look for a new home.
+				</div>
+
+				<div class="footer">
+					<a href="https://github.com/acidtv/homeground">Github</a>
+					<span class="sep">&bull;</span>
+					<a href="mailto:alex+homeground@qwoot.net">Contact</a>
 				</div>
 			</div>
 		</div>
