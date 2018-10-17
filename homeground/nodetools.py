@@ -2,6 +2,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import Point, MultiPolygon
 from itertools import groupby
 from functools import reduce
+from .util import Itercount
 import utm
 
 
@@ -26,10 +27,13 @@ def node_intersections(nodes, min_layers, type_radius):
     # turn nodes into polygons with buffer()
     polygon_groups = (polygonize(group, type_radius) for group in node_groups)
 
-    # merge polygons
-    count, intersections = counting_reduce(lambda a, b: a.intersection(b), polygon_groups, MultiPolygon([]))
+    # wrap polygon_groups iterator in counter to count the layers
+    polygon_group_counter = Itercount(polygon_groups)
 
-    if count < min_layers:
+    # merge polygons
+    intersections = reduce(lambda a, b: a.intersection(b), polygon_group_counter)
+
+    if polygon_group_counter.count() < min_layers:
         raise TooFewNodeTypesException()
 
     if not isinstance(intersections, MultiPolygon):
@@ -67,6 +71,7 @@ def polygonize(nodes, type_radius):
                         node_type_id is the dictionary key, the radius in meters the value.
     :return             A list of polygons.
     """
+
     if not nodes:
         return []
 
@@ -93,17 +98,8 @@ def to_latlon(coords, zone_number, zone_letter):
     :param zone_letter  The zone letter for coordinates.
     :return             A list with lat/lon coordinates.
     """
+
     return (utm.to_latlon(x, y, zone_number, zone_letter) for x, y in coords)
-
-
-def counting_reduce(func, data, initial):
-    """
-    A version of python's reduce() that includes a counter.
-
-
-    """
-    counting_func = lambda a, b: (1, b) if a[0] == 0 else (a[0]+1, func(a[1], b))
-    return reduce(counting_func, data, (0, initial))
 
 
 def zone_by_latlon(lat, lon):
