@@ -16,9 +16,9 @@ def node_intersections(nodes, min_layers, type_radius):
     :param min_layers:  The minimum amount of different node types that should
                         be present in the output. Usually the amount of types
                         you want to see the results for.
-    :param type_radius  A dictionary with the radius to use per node type_id. The
+    :param type_radius: A dictionary with the radius to use per node type_id. The
                         node_type_id is the dictionary key, the radius in meters the value.
-    :return             An iterable with polygons.
+    :return:            An iterable with polygons.
     """
 
     # group by second element, node_type_id
@@ -52,8 +52,8 @@ def group_nodes(nodes, groupby_key):
 
     :param nodes:       An iterable with node records. A record should consist
                         of a (lat, lon, type_id) tuple.
-    :param groupby_key  The index of the field to group by. See nodes param for possible keys.
-    :return             An iterator where every element is a group of nodes.
+    :param groupby_key: The index of the field to group by. See nodes param for possible keys.
+    :return:            An iterator where every element is a group of nodes.
     """
 
     for key, group in groupby(nodes, key=lambda n: n[groupby_key]):
@@ -69,7 +69,7 @@ def polygonize(nodes, type_radius):
                         of a (lat, lon, type_id) tuple.
     :param type_radius  A dictionary with the radius to use per node type_id. The
                         node_type_id is the dictionary key, the radius in meters the value.
-    :return             A list of polygons.
+    :return:            A list of polygons.
     """
 
     if not nodes:
@@ -94,22 +94,21 @@ def to_latlon(coords, zone_number, zone_letter):
     Converts a list of utm coordinates to lat/lon.
 
     :param coords:      A list with (x, y) tuples.
-    :param zone_number  The zone number for coordinates.
-    :param zone_letter  The zone letter for coordinates.
-    :return             A list with lat/lon coordinates.
+    :param zone_number: The zone number for coordinates.
+    :param zone_letter: The zone letter for coordinates.
+    :return:            A list with lat/lon coordinates.
     """
 
     return (utm.to_latlon(x, y, zone_number, zone_letter) for x, y in coords)
 
 
-def zone_by_latlon(lat, lon):
-    zone_number = latlon_to_zone_number(lat, lon)
-    zone_letter = latitude_to_zone_letter(lat)
-
-    return zone_number, zone_letter
-
-
 def bounds_area(bounds):
+    """
+    Calculates the area a set of bounds span
+
+    :param bounds:  A list with bounds: ((topleft_x, topleft_y), (bottomright_x, bottomright_y))
+    :return:        The area as a float
+    """
     return (bounds[1][0] - bounds[0][0]) * (bounds[1][1] - bounds[0][1])
 
 

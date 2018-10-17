@@ -19,6 +19,14 @@ type_map = {
 
 
 def nodes(filename, node_types):
+    """
+    Yields nodes read from filename
+
+    :param filename:    An Openstreetmap xml export file to read nodes from
+    :param node_types:  A dictionary with node types to import where the key is the OSM node name and the value the node_type_id
+    :return:            Iterator with nodes
+    """
+
     catch = ['node', 'way']
     used = ['tag', 'nd']
     cachefile = 'osm-import-cache'
@@ -58,6 +66,16 @@ def nodes(filename, node_types):
 
 
 def make_nodes(elm, available_node_types, cache):
+    """
+    Creates Node() objects from an xml element
+
+    An xml element can contain multiple nodes.
+
+    :param elm:                     An xml element
+    :param available_node_types:    Node types to look for
+    :param cache:                   The shelve node coordinate cache
+    :return:                        An iterator with nodes
+    """
     node_types = get_node_types(elm)
 
     if not node_types:
@@ -82,7 +100,15 @@ def make_nodes(elm, available_node_types, cache):
 
         yield node
 
+
 def get_node_coords(elm, cache):
+    """
+    Get lat/lon coordinates for elm
+
+    :param elm:     An xml element
+    :param cache:   The shelve node coordinate cache
+    :return:        A lat/lon tuple
+    """
     children = list(elm.iterchildren('nd'))
 
     if not children:
@@ -93,7 +119,14 @@ def get_node_coords(elm, cache):
 
     return (lat, lon)
 
+
 def get_node_types(node):
+    """
+    Yields node types from an xml element
+
+    :param node:    An xml element
+    :return:        An iterator with node type names
+    """
     for tag in node.iterchildren('tag'):
         for key, value in type_map.items():
             # check if tag key and value match
@@ -104,16 +137,20 @@ def get_node_types(node):
                 yield key
 
 
-# for testing the import code for memory leaks
 class InfiniteXML (object):
+    """
+    Class for testing the import code for memory leaks by providing an
+    infinite import-compatible xml stream
+    """
+
     def __init__(self):
         self._root = True
         self.i = 0
+
     def read(self, len=None):
         self.i = self.i + 1
         if self._root:
-            self._root=False
+            self._root = False
             return b"<?xml version='1.0' encoding='US-ASCII'?><records>\n"
         else:
             return b'<node id="%d" lat="50" lon="40">\n\t<ancestor attribute="value">text value</ancestor>\n</node>\n' % self.i
-
