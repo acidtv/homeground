@@ -26,10 +26,13 @@ def index():
         [2000, '2km'],
     ]
 
+    initial_coords = app.config['INITIAL_COORDS'].split(',')
+
     return render_template(
         'index.html',
         node_types=db.session.query(NodeType).all(),
-        ranges=ranges
+        ranges=ranges,
+        initial_coords=initial_coords
     )
 
 

@@ -59,9 +59,11 @@ function init_map() {
 		accessToken: 'pk.eyJ1IjoiYWxleC1ydWNvbGEiLCJhIjoiY2pscncyODJnMDk1bDNrbGI3dWtpbmdyNSJ9.Ary5QUiC-HZOizD7N8ping',
 	});
 
+	mapdata = $('#map').data();
+
 	map = new L.Map('map', {
-		center: new L.LatLng(52.08, 4.33),
-		zoom: 12,
+		center: new L.LatLng(mapdata['lat'], mapdata['lon']),
+		zoom: 15,
 		layers: [baselayer],
 		zoomControl: false
 	});
@@ -127,9 +129,11 @@ function clear_map() {
 
 function map_search(query) {
 	url = 'https://nominatim.openstreetmap.org/search'
-	params = $(event.target).serializeArray();
-	params.push({name: 'format', value: 'jsonv2'});
-	params.push({name: 'limit', value: 1});
+	params = [
+		{name: 'q', value: query},
+		{name: 'format', value: 'jsonv2'},
+		{name: 'limit', value: 1},
+	];
 
 	$.getJSON(
 		url, 
