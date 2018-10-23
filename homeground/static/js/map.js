@@ -82,6 +82,8 @@ function update_map_by_form() {
 	cmp_last_filter = JSON.stringify(last_filter);
 	cmp_filter = JSON.stringify(filter);
 
+	clear_notifications();
+
 	if (cmp_last_filter != cmp_filter)
 	{
 		// save bounds if filter changed, so we know we have the results for that query within these bounds
@@ -107,10 +109,10 @@ function update_map(filter, bounds) {
 		$.param(query),
 		function(data) {
 			clear_map();
-			clear_notifications();
 
 			if ('error' in data) {
 				notification(data['error']);
+				clear_polygons_cache();
 			}
 
 			if ('polygons' in data) {
@@ -151,4 +153,9 @@ function notification(text) {
 
 function clear_notifications() {
 	$('.notifications div').remove();
+}
+
+function clear_polygons_cache() {
+	last_filter_bounds = map.getBounds();
+	last_filter = [];
 }
