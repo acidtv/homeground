@@ -4,12 +4,5 @@ setup(
     name='homeground',
     packages=['homeground'],
     include_package_data=True,
-    install_requires=[
-        'flask',
-        'lxml',
-        'sqlalchemy',
-        'flask-sqlalchemy',
-        'shapely',
-        'utm',
-    ],
+    install_requires=[],
 )

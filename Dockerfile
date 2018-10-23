@@ -2,9 +2,13 @@ FROM python:3.5
 
 WORKDIR /usr/src/app
 
-COPY . .
+# install requirements
+COPY requirements.txt .
+RUN pip install uwsgi && pip install -r requirements.txt
 
-RUN pip install uwsgi && pip install -e . 
+# install module
+COPY . .
+RUN pip install -e . 
 
 EXPOSE 5000/tcp
 
