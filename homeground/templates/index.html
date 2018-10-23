@@ -21,8 +21,11 @@
 
 			<div class="content">
 				<form class="search">
-					<input name="q" class="q" />
+					<input type="text" name="q" class="q" />
 					<input class="submit" type="submit" value="Search" />
+					{% if searchbox_note %}
+						<span class="note">{{ searchbox_note }}</span>
+					{% endif %}
 				</form>
 
 				<p>Show places near:</p>

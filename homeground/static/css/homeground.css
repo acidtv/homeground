@@ -96,6 +96,24 @@ a:hover {
 	display: block;
 }
 
+.menu .search .note {
+	font-size: .9em;
+	line-height: 1.3em;
+	color: blue;
+	margin-top: 1em;
+	padding-left: 1.2em;
+	display: block;
+	position: relative;
+}
+
+.menu .search .note::before {
+	content: "\25CF";
+	font-weight: bold;
+	padding: 0 .2em;
+	position: absolute;
+	left: 0px;
+}
+
 .menu form li {
 	list-style: none;
 }

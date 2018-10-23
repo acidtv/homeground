@@ -32,7 +32,8 @@ def index():
         'index.html',
         node_types=db.session.query(NodeType).all(),
         ranges=ranges,
-        initial_coords=initial_coords
+        initial_coords=initial_coords,
+        searchbox_note=app.config['SEARCHBOX_NOTE'],
     )
 
 
