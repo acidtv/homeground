@@ -1,0 +1,14 @@
+version: '2.0'
+services:
+    app:
+        extends:
+            file: docker-compose-base.yml
+            service: app
+        restart: always
+        command: uwsgi --ini uwsgi.ini
+        volumes: 
+            - db:/var/db/
+        environment:
+            - FLASK_DEBUG=0
+            - FLASK_ENV=production
+            - HOMEGROUND_SETTINGS=../app.cfg

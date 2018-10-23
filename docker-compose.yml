@@ -1,14 +1,11 @@
 version: '2.0'
 services:
     app:
-        restart: on-failure
-        build: .
-        ports: 
-            - 5000:5000
+        extends:
+            file: docker-compose-base.yml
+            service: app
         volumes: 
             - .:/usr/src/app
         environment:
             - FLASK_DEBUG=1
-            - FLASK_APP=homeground
             - FLASK_ENV=development
-            - HOMEGROUND_SETTINGS=default.cfg

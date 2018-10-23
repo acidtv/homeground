@@ -1,0 +1,11 @@
+version: '2.0'
+services:
+    app:
+        restart: on-failure
+        build: .
+        ports: 
+            - 5000:5000
+        environment:
+            - FLASK_APP=homeground
+            - FLASK_ENV=development
+            - HOMEGROUND_SETTINGS=default.cfg
