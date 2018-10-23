@@ -34,6 +34,7 @@ def node_intersections(nodes, min_layers, type_radius):
     try:
         intersections = reduce(lambda a, b: a.intersection(b), polygon_group_counter)
     except TypeError:
+        # reduce() throws a TypeError when the generator was empty
         return []
 
     if polygon_group_counter.count() < min_layers:

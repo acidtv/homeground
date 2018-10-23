@@ -139,14 +139,7 @@ function map_search(query) {
 		url, 
 		$.param(params),
 		function(data) {
-			console.log(data);
-			rawbounds = data[0]['boundingbox'];
-			bounds = new L.LatLngBounds(
-				new L.LatLng(rawbounds[0], rawbounds[2]),
-				new L.LatLng(rawbounds[1], rawbounds[3])
-			);
-			
-			map.flyToBounds(bounds, {maxZoom: 17});
+			map.flyTo([data[0]['lat'], data[0]['lon']], 15);
 		})
 }
 
