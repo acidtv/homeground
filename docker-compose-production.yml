@@ -1,4 +1,8 @@
 version: '2.0'
+
+volumes:
+    db:
+
 services:
     app:
         extends:
@@ -7,8 +11,9 @@ services:
         restart: always
         command: uwsgi --ini uwsgi.ini
         volumes: 
-            - /var/db
+            - db:/var/db
         environment:
             - FLASK_DEBUG=0
             - FLASK_ENV=production
             - HOMEGROUND_SETTINGS=../app.cfg
+
