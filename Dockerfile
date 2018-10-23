@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN pip install -e .
+RUN pip install uwsgi && pip install -e . 
 
 EXPOSE 5000/tcp
 
