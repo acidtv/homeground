@@ -31,7 +31,10 @@ def node_intersections(nodes, min_layers, type_radius):
     polygon_group_counter = Itercount(polygon_groups)
 
     # merge polygons
-    intersections = reduce(lambda a, b: a.intersection(b), polygon_group_counter)
+    try:
+        intersections = reduce(lambda a, b: a.intersection(b), polygon_group_counter)
+    except TypeError:
+        return []
 
     if polygon_group_counter.count() < min_layers:
         raise TooFewNodeTypesException()
