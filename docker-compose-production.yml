@@ -7,7 +7,7 @@ services:
         restart: always
         command: uwsgi --ini uwsgi.ini
         volumes: 
-            - db:/var/db/
+            - /var/db
         environment:
             - FLASK_DEBUG=0
             - FLASK_ENV=production
